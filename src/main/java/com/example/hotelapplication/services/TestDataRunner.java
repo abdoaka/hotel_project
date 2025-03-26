@@ -21,6 +21,7 @@ public class TestDataRunner {
 
             chambreRepository.save(testRoom);
             System.out.println("Test room inserted!");
+            System.out.println("testing git");
         };
     }
 }
