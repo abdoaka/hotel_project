@@ -4,11 +4,13 @@ package com.example.hotelapplication.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@Getter
+@Data // Generates getters, setters, toString, equals, hashCode
+@NoArgsConstructor // Generates default constructor
+@AllArgsConstructor // Generates constructor with all fields
 @Entity
 @Table(name = "reservation")
 public class Reservation {
@@ -30,15 +32,5 @@ public class Reservation {
     @Column(name = "departure_date", nullable = false)
     private LocalDate departureDate;
 
-    // Getters, setters, constructor
-    public Reservation() {
 
-    }
-    public Reservation(Long id, Client client, Chambre chambre, LocalDate arrivalDate, LocalDate departureDate) {
-        this.id = id;
-        this.client = client;
-        this.chambre = chambre;
-        this.arrivalDate = arrivalDate;
-        this.departureDate = departureDate;
-    }
 }

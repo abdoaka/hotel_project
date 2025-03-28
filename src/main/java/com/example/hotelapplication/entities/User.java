@@ -3,11 +3,13 @@ package com.example.hotelapplication.entities;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@Getter
+@Data // Generates getters, setters, toString, equals, hashCode
+@NoArgsConstructor // Generates default constructor
+@AllArgsConstructor // Generates constructor with all fields
 @Entity
 @Table(name = "user")
 public class User {
