@@ -1,29 +1,33 @@
 package com.example.hotelapplication.entities;
 
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.AssertTrue;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
-@Data // Generates getters, setters, toString, equals, hashCode
-@NoArgsConstructor // Generates default constructor
-@AllArgsConstructor // Generates constructor with all fields
+import java.time.LocalDate;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "reservation")
 public class Reservation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
+    @JsonBackReference // Fix for bidirectional relationship
     private Client client;
 
     @ManyToOne
     @JoinColumn(name = "chambre_id", nullable = false)
+    @JsonBackReference // Fix for bidirectional relationship
     private Chambre chambre;
 
     @Column(name = "arrival_date", nullable = false)
@@ -32,5 +36,8 @@ public class Reservation {
     @Column(name = "departure_date", nullable = false)
     private LocalDate departureDate;
 
-
+    @AssertTrue(message = "Departure date must be after arrival date")
+    private boolean isValidDates() {
+        return departureDate.isAfter(arrivalDate);
+    }
 }

@@ -15,6 +15,7 @@ public class Chambre {
     private Long id;
 
     @Column(name = "room_number", unique = true, nullable = false)
+
     private String roomNumber;
 
     private String type;
