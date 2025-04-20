@@ -24,19 +24,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(withDefaults()) // Keep HTTP Basic Auth
-                .formLogin(form -> form.disable()); // Disable form login
-
-        return http.build();
-    }
-
-    @Bean
     public UserDetailsService userDetailsService() {
         UserDetails admin = User.builder()
                 .username("admin")
