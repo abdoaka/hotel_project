@@ -10,7 +10,10 @@ import com.example.hotelapplication.repositories.ClientRepository;
 import com.example.hotelapplication.repositories.ReservationRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ReservationService {
@@ -100,12 +103,41 @@ public class ReservationService {
         chambre.setStatus("AVAILABLE");
         chambreRepository.save(chambre);
     }
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<Map<String, Object>> getAllReservations() {
+        List<Object[]> rows = reservationRepository.findAllReservationWithClientNames();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Object[] row : rows) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", row[0]);
+            map.put("arrivalDate", row[1]);
+            map.put("departureDate", row[2]);
+            map.put("clientFirstName", row[3]);
+            map.put("clientLastName", row[4]);
+            map.put("roomNumber", row[5]);
+            result.add(map);
+        }
+        if(result.isEmpty()){
+            throw new ResourceNotFoundException("No reservations found ");
+        }
+        return result;
     }
-    public Reservation getReservationById(Long id) {
-        return reservationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
+    public List<Map<String, Object>> getReservationsByClientId(Long clientId) {
+        List<Object[]> rows = reservationRepository.findReservationsByClientWithRoomNumber(clientId);
+        if (rows.isEmpty()) {
+            throw new ResourceNotFoundException("No reservations found for this client");
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Object[] row : rows) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", row[0]);
+            map.put("arrivalDate", row[1]);
+            map.put("departureDate", row[2]);
+            map.put("roomNumber", row[3]);
+            result.add(map);
+        }
+        return result;
     }
 
     public void deleteReservation(Long id) {

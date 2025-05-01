@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -32,14 +33,14 @@ public class ReservationController {
 
     // Get all reservations
     @GetMapping
-    public List<Reservation> getAllReservations() {
+    public List<Map<String, Object>> getAllReservations() {
         return reservationService.getAllReservations();
     }
 
     // Get reservation by ID
-    @GetMapping("/{id}")
-    public Reservation getReservationById(@PathVariable Long id) {
-        return reservationService.getReservationById(id);
+    @GetMapping("/client/{clientId}")
+    public List<Map<String, Object>> getReservationsByClient(@PathVariable Long clientId) {
+        return reservationService.getReservationsByClientId(clientId);
     }
 
     // Update reservation dates

@@ -10,7 +10,12 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     // Find all reservations for a specific client
-    List<Reservation> findByClientId(Long clientId);
+    @Query("""
+    SELECT r.id, r.arrivalDate, r.departureDate, r.chambre.roomNumber
+    FROM Reservation r
+    WHERE r.client.id = :clientId
+""")
+    List<Object[]> findReservationsByClientWithRoomNumber(@Param("clientId") Long clientId);
 
     // Find all reservations for a specific room
     List<Reservation> findByChambreId(Long chambreId);
@@ -30,4 +35,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("departureDate") LocalDate departureDate,
             @Param("excludeReservationId") Long excludeReservationId
     );
+    @Query("""
+    SELECT r.id, r.arrivalDate, r.departureDate, r.client.firstName, r.client.lastName, r.chambre.roomNumber
+    FROM Reservation r
+""")
+    List<Object[]> findAllReservationWithClientNames();
 }
